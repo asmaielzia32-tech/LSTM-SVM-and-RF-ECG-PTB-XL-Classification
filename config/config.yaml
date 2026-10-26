@@ -1,0 +1,33 @@
+data: 
+  scp_statements: ./dataset/ptb-xl-a-large-publicly-available-electrocardiography-dataset-1.0.3/
+  ptbxl_dataset: ./dataset/ptb-xl-a-large-publicly-available-electrocardiography-dataset-1.0.3/
+  sampling_rate: 100                                       # choose between 100 and 500 Hz (fixed for PTB-XL)
+  normalize: true                                          # z-score normalization per channel (stats computed on train set only)
+              
+model:               
+  model_type: "lstm"                                       # base architecture: rnn | lstm | gru
+  bidirectional: false                                     # set to true for BiLSTM / BiGRU
+  input_size: 12                                           # number of sensor channels (fixed for PTB-XL)
+  hidden_size: 256                                         # hidden state dimension per direction
+  num_layers: 1                                            # number of stacked recurrent layers
+  dropout: 0.3                                             # dropout probability (between layers and before FC)
+  num_classes: 5                                           # NORM, MI, STTC, CD, HYP
+
+training:
+  checkpoint_dir: ./checkpoints                            # directory to save checkpoints of the model, and stats.
+  results_csv: "results/comparison.csv"                    # test results are appended here after each test.py run
+  batch_size: 64   
+  num_workers: 0                                           # number of subprocesses for data loading. 0 is default (main process).
+  pin_memory: false                                        # set to true if using CUDA (speeds up data transfer to GPU)
+  device: "cpu"                                           # cuda | mps | cpu  (auto-falls back to cpu if unavailable)
+  learning_rate: 1e-3                        
+  epochs: 10                        
+  warmup_ratio: 0.1                                        # fraction of total steps used for linear warmup. 
+  monitor_metric: "f1"                                     # metric used to track the best model: loss | accuracy | f1
+  monitor_lower_is_better: false                           # true for loss, false for accuracy / f1
+  early_stopping_patience: 15                              # stop after this many epochs with no improvement (0 = disabled)
+
+shallow:
+  model_type: "svm"                                        
+  kernel: "rbf"   
+  C: 1.0                                         # for SVM: linear | rbf | poly
