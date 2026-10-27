@@ -7,6 +7,8 @@ import torch.nn as nn
 from tqdm import tqdm
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, average_precision_score
+from sklearn.metrics import hamming_loss
+
 
 def filter_ptbxl(ptbxl_database: pd.DataFrame) -> pd.DataFrame:
     """
@@ -74,7 +76,9 @@ def evaluate(model: nn.Module, dataloader, criterion, device) -> dict:
             predictions.extend(pred.cpu().tolist())
             references.extend(labels.cpu().tolist())
             score.extend(raw_pred.cpu().tolist())
-
+    
+  
+    
     metrics = compute_metrics(predictions, references, score)
     metrics["loss"] = running_loss / len(dataloader)
     
@@ -99,6 +103,7 @@ def compute_metrics(predictions: list, references: list, score: list) -> dict:
         "recall":    recall_score(references, predictions, average="macro", zero_division=0),
         "f1":        f1_score(references, predictions, average="macro", zero_division=0),
         "auprc":     average_precision_score(references, score, average="macro"),
+        "hamming_loss": hamming_loss(references, predictions),
     }
 
 
