@@ -2,6 +2,7 @@ from shallow_preprocessing import shallow_preprocessing
 import joblib
 import os
 from sklearn.metrics import classification_report
+from sklearn.metrics import hamming_loss
 
 from utils import compute_metrics, save_results_csv
 from yaml_config_manager import load_config
@@ -34,6 +35,8 @@ if __name__ == "__main__":
 
     # -- 4. Evaluate ----------------------------------------------------------
     y_pred = svm_clf.predict(X_test_scaled)
+    h_loss = hamming_loss(y_test_bin, y_pred)
+    print(f"Hamming Loss: {h_loss:.4f}")
     
     print(classification_report(
     y_test_bin,
