@@ -14,6 +14,8 @@ My Contributions
 2. Adapted the structure of svm_test.py to implement the Random Forest testing script (RF_test.py).
 
 3. Added per-diagnostic precision, recall, and F1-score reporting to RF_test.py, svm_test.py, and rnn_test.py to provide a more detailed comparison of model performance across the five diagnostic categories.
+   
+5. Added Hamming-Lose for each of the models
 
 Evaluated and documented the results for Random Forest, SVM, and LSTM:
 
